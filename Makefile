@@ -193,6 +193,30 @@ webserver/log.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/webserver.dir/build.make CMakeFiles/webserver.dir/webserver/log.cc.s
 .PHONY : webserver/log.cc.s
 
+webserver/util.o: webserver/util.cc.o
+.PHONY : webserver/util.o
+
+# target to build an object file
+webserver/util.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/webserver.dir/build.make CMakeFiles/webserver.dir/webserver/util.cc.o
+.PHONY : webserver/util.cc.o
+
+webserver/util.i: webserver/util.cc.i
+.PHONY : webserver/util.i
+
+# target to preprocess a source file
+webserver/util.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/webserver.dir/build.make CMakeFiles/webserver.dir/webserver/util.cc.i
+.PHONY : webserver/util.cc.i
+
+webserver/util.s: webserver/util.cc.s
+.PHONY : webserver/util.s
+
+# target to generate assembly for a file
+webserver/util.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/webserver.dir/build.make CMakeFiles/webserver.dir/webserver/util.cc.s
+.PHONY : webserver/util.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -209,6 +233,9 @@ help:
 	@echo "... webserver/log.o"
 	@echo "... webserver/log.i"
 	@echo "... webserver/log.s"
+	@echo "... webserver/util.o"
+	@echo "... webserver/util.i"
+	@echo "... webserver/util.s"
 .PHONY : help
 
 
