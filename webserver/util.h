@@ -6,10 +6,12 @@
 #include <sys/types.h>
 #include <sys/syscall.h>
 #include <stdio.h>
+#include <stdint.h>
 
 namespace webserver{
 
-pid_t GetThreadId();
+uint32_t GetThreadId(); //pid_t
+uint32_t GetFiberId();
 
 }
 

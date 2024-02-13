@@ -10,15 +10,44 @@
 #include <map>
 #include <vector>
 
+#define WEBSERVER_LOG_LEVEL(logger, level) \
+	if(logger->getLevel() <= level) \
+	        webserver::LogEventWrap(webserver::LogEvent::ptr(new webserver::LogEvent(logger, level, \
+			__FILE__, __LINE__, 0, webserver::GetThreadId(), \
+			webserver::GetFiberId(), time(0)))).getSS()
+
+#define WEBSERVER_LOG_DEBUG(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::DEBUG)
+#define WEBSERVER_LOG_INFO(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::INFO)
+#define WEBSERVER_LOG_WARN(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::WARN)
+#define WEBSERVER_LOG_ERROR(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::ERROR)
+#define WEBSERVER_LOG_FATAL(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::FATAL)
+
 namespace webserver{
 
 class Logger;
+
+//日志级别
+class LogLevel{
+public:
+        enum Level{
+                UNKNOW = 0,
+                DEBUG = 1, //用于记录详细的调试信息
+                INFO = 2,  //用于记录一般性的信息性消息
+                WARN = 3,  //用于记录潜在的问题或警告
+                ERROR = 4, //用于记录可恢复的错误或异常
+                FATAL = 5  //用于记录严重的错误，导致应用程序无法继续执行
+        };
+
+        static const char* ToString(LogLevel::Level level);
+};
 
 //日志事件
 class LogEvent{
 public:
 	typedef std::shared_ptr<LogEvent> ptr;  //别名
-	LogEvent(const char* file, int32_t line, uint32_t elapse, uint32_t thread_id, uint32_t fiber_id, uint64_t time);
+	LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level
+		, const char* file, int32_t line, uint32_t elapse
+		, uint32_t thread_id, uint32_t fiber_id, uint64_t time);
 
 	const char* getFile() const {return m_file;}
 	int32_t getLine() const {return m_line;}
@@ -27,8 +56,11 @@ public:
 	uint32_t getFiberId() const {return m_fiberId;}
 	uint64_t getTime() const {return m_time;}
 	std::string getContent() const{return m_ss.str();}
+	std::shared_ptr<Logger> getLogger() const{return m_logger;}
+	LogLevel::Level getLevel() const{return m_level;}
 
 	std::stringstream& getSS(){return m_ss;}
+	void format(const char* fmt, ...);
 private:                               //考虑内存对齐
 	const char* m_file = nullptr;  //文件名
         int32_t m_line = 0;	       //行号
@@ -37,21 +69,18 @@ private:                               //考虑内存对齐
 	uint32_t m_fiberId = 0;	       //协程id
 	uint64_t m_time = 0;           //时间戳
 	std::stringstream m_ss;	       
+
+	std::shared_ptr<Logger> m_logger;
+	LogLevel::Level m_level;
 };
 
-//日志级别
-class LogLevel{
+class LogEventWrap{
 public:
-	enum Level{
-		UNKNOW = 0,
-		DEBUG = 1, //用于记录详细的调试信息
-		INFO = 2,  //用于记录一般性的信息性消息
-		WARN = 3,  //用于记录潜在的问题或警告
-		ERROR = 4, //用于记录可恢复的错误或异常
-		FATAL = 5  //用于记录严重的错误，导致应用程序无法继续执行
-	};
-
-	static const char* ToString(LogLevel::Level level);
+	LogEventWrap(LogEvent::ptr e);
+	~LogEventWrap();
+	std::stringstream& getSS();
+private:
+	LogEvent::ptr m_event;
 };
 
 //日志格式器
