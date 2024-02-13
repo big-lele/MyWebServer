@@ -9,6 +9,7 @@
 #include <fstream>  //文件输入输出流头文件
 #include <map>
 #include <vector>
+#include "singleton.h"
 
 #define WEBSERVER_LOG_LEVEL(logger, level) \
 	if(logger->getLevel() <= level) \
@@ -16,11 +17,26 @@
 			__FILE__, __LINE__, 0, webserver::GetThreadId(), \
 			webserver::GetFiberId(), time(0)))).getSS()
 
+//使用流式方式将日志级别level的日志写入到logger
 #define WEBSERVER_LOG_DEBUG(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::DEBUG)
 #define WEBSERVER_LOG_INFO(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::INFO)
 #define WEBSERVER_LOG_WARN(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::WARN)
 #define WEBSERVER_LOG_ERROR(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::ERROR)
 #define WEBSERVER_LOG_FATAL(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::FATAL)
+
+#define WEBSERVER_LOG_FMT_LEVEL(logger, level, fmt, ...) \
+    if(logger->getLevel() <= level) \
+        webserver::LogEventWrap(webserver::LogEvent::ptr(new webserver::LogEvent(logger, level, \
+                        __FILE__, __LINE__, 0, webserver::GetThreadId(),\
+                webserver::GetFiberId(), time(0)))).getEvent()->format(fmt, __VA_ARGS__)
+
+//使用格式化方式将日志级别debug的日志写入到logger
+#define WEBSERVER_LOG_FMT_DEBUG(logger, fmt, ...) WEBSERVER_LOG_FMT_LEVEL(logger, webserver::LogLevel::DEBUG, fmt, __VA_ARGS__)
+#define WEBSERVER_LOG_FMT_INFO(logger, fmt, ...)  WEBSERVER_LOG_FMT_LEVEL(logger, webserver::LogLevel::INFO, fmt, __VA_ARGS__)
+#define WEBSERVER_LOG_FMT_WARN(logger, fmt, ...)  WEBSERVER_LOG_FMT_LEVEL(logger, webserver::LogLevel::WARN, fmt, __VA_ARGS__)
+#define WEBSERVER_LOG_FMT_ERROR(logger, fmt, ...) WEBSERVER_LOG_FMT_LEVEL(logger, webserver::LogLevel::ERROR, fmt, __VA_ARGS__)
+#define WEBSERVER_LOG_FMT_FATAL(logger, fmt, ...) WEBSERVER_LOG_FMT_LEVEL(logger, webserver::LogLevel::FATAL, fmt, __VA_ARGS__)
+
 
 namespace webserver{
 
@@ -61,6 +77,7 @@ public:
 
 	std::stringstream& getSS(){return m_ss;}
 	void format(const char* fmt, ...);
+	void format(const char* fmt, va_list al);
 private:                               //考虑内存对齐
 	const char* m_file = nullptr;  //文件名
         int32_t m_line = 0;	       //行号
@@ -78,6 +95,7 @@ class LogEventWrap{
 public:
 	LogEventWrap(LogEvent::ptr e);
 	~LogEventWrap();
+	LogEvent::ptr getEvent() const { return m_event;}
 	std::stringstream& getSS();
 private:
 	LogEvent::ptr m_event;
@@ -114,6 +132,9 @@ public:
 									  //抽象类是一种不能被实例化的类，它的存在主要用于作为其他类的基类或接口，并为派生类提供一种共享的接口和行为规范
         void setFormatter(LogFormatter::ptr val){ m_formatter = val;}
 	LogFormatter::ptr getFormatter() const {return m_formatter;}
+
+	LogLevel::Level getLevel() const {return m_level;}
+	void setLevel(LogLevel::Level val){m_level = val;}
 protected:  //可以被派生类访问
 	LogLevel::Level m_level;
 	LogFormatter::ptr m_formatter;
@@ -165,6 +186,19 @@ private:
 	std::string m_filename;
 	std::ofstream m_filestream;
 };
+
+class LoggerManager{
+public:
+	LoggerManager();
+	Logger::ptr getLogger(const std::string& name);
+
+	void init();
+private:
+	std::map<std::string, Logger::ptr> m_loggers;
+	Logger::ptr m_root;
+};
+
+typedef webserver::Singleton<LoggerManager> LoggerMgr;
 
 }
 

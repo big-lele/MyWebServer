@@ -4,6 +4,7 @@
 #include <functional>
 #include <time.h>
 #include <string.h>
+#include <cstdarg>
 
 namespace webserver{
 
@@ -31,6 +32,22 @@ LogEventWrap::LogEventWrap(LogEvent::ptr e):m_event(e){
 
 LogEventWrap::~LogEventWrap(){
         m_event->getLogger()->log(m_event->getLevel(), m_event);
+}
+
+void LogEvent::format(const char* fmt, ...){
+        va_list al;
+	va_start(al, fmt); //调用宏
+	format(fmt, al);
+	va_end(al);
+}
+        
+void LogEvent::format(const char* fmt, va_list al){
+        char* buf = nullptr;
+	int len = vasprintf(&buf, fmt, al);
+	if(len != -1){
+	        m_ss << std::string(buf, len);
+		free(buf);
+	}
 }
 
 std::stringstream& LogEventWrap::getSS(){
@@ -212,6 +229,7 @@ void Logger::fatal(LogEvent::ptr event){
 }
 
 FileLogAppender::FileLogAppender(const std::string& filename):m_filename(filename){
+	reopen();
 }
 
 void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event){
@@ -358,5 +376,14 @@ void LogFormatter::init(){
         //std::cout << m_items.size() << std::endl;
 }
 
+LoggerManager::LoggerManager(){
+	m_root.reset(new Logger);
+	m_root->addAppender(LogAppender::ptr(new StdoutLogAppender));
+}
+
+Logger::ptr LoggerManager::getLogger(const std::string& name){
+        auto it = m_loggers.find(name);
+	return it == m_loggers.end() ? m_root : it->second;
+}
 
 }
