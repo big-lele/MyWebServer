@@ -9,6 +9,7 @@
 #include <fstream>  //文件输入输出流头文件
 #include <map>
 #include <vector>
+#include "util.h"
 #include "singleton.h"
 
 #define WEBSERVER_LOG_LEVEL(logger, level) \
@@ -37,6 +38,7 @@
 #define WEBSERVER_LOG_FMT_ERROR(logger, fmt, ...) WEBSERVER_LOG_FMT_LEVEL(logger, webserver::LogLevel::ERROR, fmt, __VA_ARGS__)
 #define WEBSERVER_LOG_FMT_FATAL(logger, fmt, ...) WEBSERVER_LOG_FMT_LEVEL(logger, webserver::LogLevel::FATAL, fmt, __VA_ARGS__)
 
+#define WEBSERVER_LOG_ROOT() webserver::LoggerMgr::GetInstance()->getRoot() // 加上前缀防止和其他文件的冲突
 
 namespace webserver{
 
@@ -45,7 +47,7 @@ class Logger;
 //日志级别
 class LogLevel{
 public:
-        enum Level{
+	enum Level{
                 UNKNOW = 0,
                 DEBUG = 1, //用于记录详细的调试信息
                 INFO = 2,  //用于记录一般性的信息性消息
@@ -193,6 +195,7 @@ public:
 	Logger::ptr getLogger(const std::string& name);
 
 	void init();
+	Logger::ptr getRoot() const { return m_root;}
 private:
 	std::map<std::string, Logger::ptr> m_loggers;
 	Logger::ptr m_root;

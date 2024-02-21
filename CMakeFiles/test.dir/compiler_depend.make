@@ -221,7 +221,6 @@ CMakeFiles/test.dir/tests/test.cc.o: tests/test.cc \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  webserver/singleton.h \
   webserver/util.h \
   /usr/include/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
@@ -234,7 +233,9 @@ CMakeFiles/test.dir/tests/test.cc.o: tests/test.cc \
   /usr/include/x86_64-linux-gnu/sys/syscall.h \
   /usr/include/x86_64-linux-gnu/asm/unistd.h \
   /usr/include/x86_64-linux-gnu/asm/unistd_64.h \
-  /usr/include/x86_64-linux-gnu/bits/syscall.h
+  /usr/include/x86_64-linux-gnu/bits/syscall.h \
+  webserver/singleton.h \
+  webserver/util.h
 
 
 /usr/include/x86_64-linux-gnu/asm/unistd.h:
@@ -611,9 +612,9 @@ tests/test.cc:
 
 /usr/include/c++/11/cctype:
 
-/usr/include/unistd.h:
-
 webserver/singleton.h:
+
+/usr/include/unistd.h:
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
 

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Dwebserver_EXPORTS
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/root/webServer/MyWebServer/. -I/root/yaml-cpp/include
 
 CXX_FLAGS =  -rdynamic -O0 -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -fPIC
 

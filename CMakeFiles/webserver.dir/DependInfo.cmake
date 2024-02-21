@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/root/webServer/MyWebServer/webserver/config.cc" "CMakeFiles/webserver.dir/webserver/config.cc.o" "gcc" "CMakeFiles/webserver.dir/webserver/config.cc.o.d"
   "/root/webServer/MyWebServer/webserver/log.cc" "CMakeFiles/webserver.dir/webserver/log.cc.o" "gcc" "CMakeFiles/webserver.dir/webserver/log.cc.o.d"
   "/root/webServer/MyWebServer/webserver/util.cc" "CMakeFiles/webserver.dir/webserver/util.cc.o" "gcc" "CMakeFiles/webserver.dir/webserver/util.cc.o.d"
   )
