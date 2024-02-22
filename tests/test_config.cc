@@ -38,13 +38,22 @@ void test_yaml(){
         YAML::Node root = YAML::LoadFile("/root/webServer/MyWebServer/bin/conf/log.yml");
         print_yaml(root, 0);
 
-	//WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << root;
+	WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << root.Scalar();
+}
+
+void test_config(){
+        WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "before: " << g_int_value_config->getValue();
+        WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "before: " << g_float_value_config->toString();
+
+	YAML::Node root = YAML::LoadFile("/root/webServer/MyWebServer/bin/conf/log.yml");
+	webserver::Config::LoadFromYaml(root);
+
+	WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "after: " << g_int_value_config->getValue();
+        WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "after: " << g_float_value_config->toString();
 }
 
 int main(int argc, char** argv){
-	WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << g_int_value_config->getValue();
-	WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << g_float_value_config->toString();
-
-	test_yaml();
+	//test_yaml();
+	test_config();
         return 0;
 }

@@ -8,7 +8,8 @@ include_directories(.)
 include_directories(/root/yaml-cpp/include)
 link_directories(/root/yaml-cpp/build)
 
-find_library(YAMLCPP libyaml-cpp.a)
+find_library(YAMLCPP libyaml-cpp)
+message("***", ${YAMLCPP})
 
 set(LIB_SRC
     webserver/log.cc
@@ -22,11 +23,11 @@ add_Library(webserver SHARED ${LIB_SRC})
 
 add_executable(test tests/test.cc)
 add_dependencies(test webserver)
-target_link_libraries(test webserver)
+target_link_libraries(test webserver ${YAMLCPP})
 
 add_executable(test_config tests/test_config.cc)
 add_dependencies(test_config webserver)
-target_link_libraries(test_config webserver -L/root/yaml-cpp/build -lyaml-cpp)
+target_link_libraries(test_config webserver ${YAMLCPP})
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

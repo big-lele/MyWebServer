@@ -5,6 +5,7 @@
 #include <sstream>  //序列化
 #include <string>
 #include <boost/lexical_cast.hpp>  //内存转化
+#include <yaml-cpp/yaml.h>
 #include "webserver/log.h"
 
 namespace webserver{
@@ -15,6 +16,7 @@ public:
 	ConfigVarBase(const std::string& name, const std::string& description = "")
 		:m_name(name)
 		,m_description(description){
+		std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
 	}
 	virtual ~ConfigVarBase(){}
 
@@ -81,7 +83,7 @@ public:
 			return tmp;
 		}
 
-		if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._0123456789") 
+		if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyz._0123456789") 
 			!= std::string::npos){
 		        WEBSERVER_LOG_ERROR(WEBSERVER_LOG_ROOT()) << "Lookup name invalid " << name;
 			throw std::invalid_argument(name);
@@ -100,6 +102,9 @@ public:
 		}
 		return std::dynamic_pointer_cast<ConfigVar<T> >(it->second); //加空格用来和 >> 区分
 	}
+
+	static void LoadFromYaml(const YAML::Node& root);
+	static ConfigVarBase::ptr LookupBase(const std::string& name); //抽象类指针可以作为返回值类型
 private:
 	static ConfigVarMap s_datas;
 };
