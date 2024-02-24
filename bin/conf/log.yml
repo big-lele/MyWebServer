@@ -31,3 +31,33 @@ system:
         k: 130
         k2: 120
         k3: 110
+
+class:
+    person:
+        name: zml
+        age: 23
+        sex: true
+    map:
+        zml1:
+            name: zml01
+            age: 24
+            sex: false
+        zml2:
+            name: zml02
+            age: 25
+            sex: true
+    vec_map:
+        k1:
+            - name: zml03
+              age: 26
+              sex: false
+            - name: zml04
+              age: 26
+              sex: false
+        k2:
+            - name: zml05
+              age: 26
+              sex: false
+            - name: zml06
+              age: 27
+              sex: true

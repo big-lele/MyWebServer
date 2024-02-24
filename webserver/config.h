@@ -30,6 +30,7 @@ public:
 
 	virtual std::string toString() = 0; //转换成明文
 	virtual bool fromString(const std::string& val) = 0;  //解析,初始化
+	virtual std::string getTypeName() const = 0;
 protected:
 	std::string m_name;
 	std::string m_description;
@@ -263,13 +264,15 @@ public:
 		       setValue(FromStr()(val));
 	       } catch(std::exception& e){
 	               WEBSERVER_LOG_ERROR(WEBSERVER_LOG_ROOT()) << "ConfigVar::toString exception"
-                                << e.what() << "convert: string to " << typeid(m_val).name();
+                                << e.what() << "convert: string to " << typeid(m_val).name()
+				<< " - " << val;
 	       }
 	       return false;
 	}
 
 	const T getValue() const {return m_val;}
 	void setValue(const T& v){m_val = v;}
+	std::string getTypeName() const override {return typeid(T).name();}
 private:
 	T m_val;
 };
@@ -281,10 +284,19 @@ public:
 	template<class T>
 	static typename ConfigVar<T>::ptr Lookup(const std::string& name, // typename告诉编译器此处为类型，因为有些情况::后 为变量名
 			const T& default_value, const std::string& description = ""){
-		auto tmp = Lookup<T>(name);
-		if(tmp){
-		        WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "Lookup name=" << name << " exists";
-			return tmp;
+		auto it = s_datas.find(name);
+		if(it != s_datas.end()){
+		        auto tmp = std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
+			if(tmp){
+			        WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "Lookup name=" << name << " exists";
+				return tmp;
+			}
+			else{
+			        WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "Lookup name=" << name << " exists but type not "
+					<< typeid(T).name() << " real_type=" << it->second->getTypeName()
+					<< " " << it->second->toString();
+                                return nullptr;
+			}
 		}
 
 		if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyz._0123456789") 
