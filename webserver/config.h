@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <functional>
+#include "log.h"
 
 namespace webserver{
 
@@ -316,8 +317,8 @@ public:
 	template<class T>
 	static typename ConfigVar<T>::ptr Lookup(const std::string& name, // typename告诉编译器此处为类型，因为有些情况::后 为变量名
 			const T& default_value, const std::string& description = ""){
-		auto it = s_datas.find(name);
-		if(it != s_datas.end()){
+		auto it = GetDatas().find(name);
+		if(it != GetDatas().end()){
 		        auto tmp = std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
 			if(tmp){
 			        WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "Lookup name=" << name << " exists";
@@ -338,14 +339,14 @@ public:
 		}
 
 	        typename ConfigVar<T>::ptr v(new ConfigVar<T>(name, default_value, description));
-		s_datas[name] = v;	
+		GetDatas()[name] = v;	
 		return v;
 	}
 
 	template<class T>
 	static typename ConfigVar<T>::ptr Lookup(const std::string& name){
-		auto it = s_datas.find(name);
-		if(it == s_datas.end()){
+		auto it = GetDatas().find(name);
+		if(it == GetDatas().end()){
 		        return nullptr;
 		}
 		return std::dynamic_pointer_cast<ConfigVar<T> >(it->second); //加空格用来和 >> 区分
@@ -354,7 +355,11 @@ public:
 	static void LoadFromYaml(const YAML::Node& root);
 	static ConfigVarBase::ptr LookupBase(const std::string& name); //抽象类指针可以作为返回值类型
 private:
-	static ConfigVarMap s_datas;
+	// 不能直接放在一个静态成员里 全局变量初始化顺序不确定
+	static ConfigVarMap& GetDatas(){
+	    static ConfigVarMap s_datas;
+	    return s_datas;
+	}
 };
 
 }

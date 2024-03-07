@@ -1,2 +1,0 @@
-2024-02-13 12:41:28	ERROR	test macro error
-2024-02-13 12:41:28	ERROR	test macro fmt error aa

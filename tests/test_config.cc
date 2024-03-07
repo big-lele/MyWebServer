@@ -1,7 +1,9 @@
 #include "webserver/config.h"
 #include "webserver/log.h"
 #include <yaml-cpp/yaml.h>
+#include <iostream>
 
+#if 1
 //约定优于配置
 webserver::ConfigVar<int>::ptr g_int_value_config =
         webserver::Config::Lookup("system.port", (int)8080, "system port");
@@ -93,7 +95,7 @@ void test_config(){
 	XX_M(g_str_int_map_value_config, str_int_map, before);
 	XX_M(g_str_int_umap_value_config, str_int_umap, before);
 
-	YAML::Node root = YAML::LoadFile("/root/webServer/MyWebServer/bin/conf/log.yml");
+	YAML::Node root = YAML::LoadFile("/root/webServer/MyWebServer/bin/conf/test.yml");
 	webserver::Config::LoadFromYaml(root);
 
 	WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "after: " << g_int_value_config->getValue();
@@ -106,6 +108,8 @@ void test_config(){
 	XX_M(g_str_int_map_value_config, str_int_map, after);
 	XX_M(g_str_int_umap_value_config, str_int_umap, after);
 }
+
+#endif
 
 class Person {
 public:
@@ -190,7 +194,7 @@ void test_class(){
     XX_PM(g_person_map, "class.map before");
     WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "before: " << g_person_vec_map->toString();
 
-    YAML::Node root = YAML::LoadFile("/root/webServer/MyWebServer/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/root/webServer/MyWebServer/bin/conf/test.yml");
     webserver::Config::LoadFromYaml(root);
 
     WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
@@ -198,9 +202,24 @@ void test_class(){
     WEBSERVER_LOG_INFO(WEBSERVER_LOG_ROOT()) << "after: " << g_person_vec_map->toString();
 }
 
+void test_log(){
+    static webserver::Logger::ptr system_log = WEBSERVER_LOG_NAME("system");
+    WEBSERVER_LOG_INFO(system_log);
+    //WEBSERVER_LOG_INFO(system_log) << "hello system" << std::endl;
+    std::cout << webserver::LoggerMgr::GetInstance()->toYamlString() << std::endl;
+    //YAML::Node root = YAML::LoadFile("/root/webServer/MyWebServer/bin/conf/log.yml");
+    //webserver::Config::LoadFromYaml(root);
+    //std::cout << "=============" << std::endl;
+    //std::cout << webserver::LoggerMgr::GetInstance()->toYamlString() << std::endl;
+    //std::cout << "=============" << std::endl;
+    //std::cout << root << std::endl;
+    //WEBSERVER_LOG_INFO(system_log) << "hello system" << std::endl;
+}
+
 int main(int argc, char** argv){
 	//test_yaml();
 	//test_config();
-	test_class();
+	//test_class();
+	test_log();
         return 0;
 }

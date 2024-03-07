@@ -11,12 +11,14 @@
 #include <vector>
 #include "util.h"
 #include "singleton.h"
+#include <iostream>
 
 #define WEBSERVER_LOG_LEVEL(logger, level) \
+	std::cout << logger << " - " << level <<std::endl; \
 	if(logger->getLevel() <= level) \
-	        webserver::LogEventWrap(webserver::LogEvent::ptr(new webserver::LogEvent(logger, level, \
-			__FILE__, __LINE__, 0, webserver::GetThreadId(), \
-			webserver::GetFiberId(), time(0)))).getSS()
+	    webserver::LogEventWrap(webserver::LogEvent::ptr(new webserver::LogEvent(logger, level, \
+                        __FILE__, __LINE__, 0, webserver::GetThreadId(), \
+                        webserver::GetFiberId(), time(0)))).getSS() 
 
 //使用流式方式将日志级别level的日志写入到logger
 #define WEBSERVER_LOG_DEBUG(logger) WEBSERVER_LOG_LEVEL(logger, webserver::LogLevel::DEBUG)
@@ -39,10 +41,12 @@
 #define WEBSERVER_LOG_FMT_FATAL(logger, fmt, ...) WEBSERVER_LOG_FMT_LEVEL(logger, webserver::LogLevel::FATAL, fmt, __VA_ARGS__)
 
 #define WEBSERVER_LOG_ROOT() webserver::LoggerMgr::GetInstance()->getRoot() // 加上前缀防止和其他文件的冲突
+#define WEBSERVER_LOG_NAME(name) webserver::LoggerMgr::GetInstance()->getLogger(name)
 
 namespace webserver{
 
 class Logger;
+class LoggerManager;
 
 //日志级别
 class LogLevel{
@@ -57,6 +61,7 @@ public:
         };
 
         static const char* ToString(LogLevel::Level level);
+	static LogLevel::Level FromString(const std::string& str);
 };
 
 //日志事件
@@ -74,7 +79,7 @@ public:
 	uint32_t getFiberId() const {return m_fiberId;}
 	uint64_t getTime() const {return m_time;}
 	std::string getContent() const{return m_ss.str();}
-	std::shared_ptr<Logger> getLogger() const{return m_logger;}
+	std::shared_ptr<Logger> getLogger() const{std::cout << "event->getlogger" << std::endl; return m_logger;}
 	LogLevel::Level getLevel() const{return m_level;}
 
 	std::stringstream& getSS(){return m_ss;}
@@ -119,9 +124,15 @@ public:
 	};
 
 	void init(); //做pattern的解析
+		     
+        bool isError() const{return m_error;} 
+        const std::string getPattern() const {return m_pattern;}
+
+	int m_items_test(){std::cout << "test_items" <<std::endl; return m_items.size();}
 private:
 	std::string m_pattern;
 	std::vector<FormatItem::ptr> m_items;
+	bool m_error = false;
 };
 
 //日志输出地 将日志消息输出到指定的目标
@@ -131,19 +142,22 @@ public:
 	virtual ~LogAppender(){}   //虚析构函数是为了确保在继承关系中正确释放资源
 				   
  	virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0; //纯虚函数，则子类必须实现该方法，使基类成为抽象类
-									  //抽象类是一种不能被实例化的类，它的存在主要用于作为其他类的基类或接口，并为派生类提供一种共享的接口和行为规范
+        virtual std::string toYamlString() = 0;	
+
+	//抽象类是一种不能被实例化的类，它的存在主要用于作为其他类的基类或接口，并为派生类提供一种共享的接口和行为规范
         void setFormatter(LogFormatter::ptr val){ m_formatter = val;}
 	LogFormatter::ptr getFormatter() const {return m_formatter;}
 
 	LogLevel::Level getLevel() const {return m_level;}
 	void setLevel(LogLevel::Level val){m_level = val;}
 protected:  //可以被派生类访问
-	LogLevel::Level m_level;
+	LogLevel::Level m_level = LogLevel::DEBUG;
 	LogFormatter::ptr m_formatter;
 };
 
 //日志器 记录和管理日志消息
 class Logger : public std::enable_shared_from_this<Logger>{
+friend class LoggerManager;
 public:
 	typedef std::shared_ptr<Logger> ptr;
 
@@ -158,15 +172,23 @@ public:
 
 	void addAppender(LogAppender::ptr appender);
 	void delAppender(LogAppender::ptr appender);
+	void clearAppenders();
 	LogLevel::Level getLevel() const { return m_level; }  //获取日志级别
 	void setLevel(LogLevel::Level val) { m_level = val; } //设置日志级别
 
 	const std::string& getName() const{return m_name;}
+
+	void setFormatter(LogFormatter::ptr val);
+	void setFormatter(const std::string& val);
+	LogFormatter::ptr getFormatter();
+
+	std::string toYamlString();
 private:
 	std::string m_name;                       //日志名称
 	LogLevel::Level m_level;                  //日志级别
         std::list<LogAppender::ptr> m_appenders;  //Appender是个列表集合
 	LogFormatter::ptr m_formatter;
+	Logger::ptr m_root;
 };
 
 //输出到控制台的Appender
@@ -174,6 +196,7 @@ class StdoutLogAppender: public LogAppender{
 public:
 	typedef std::shared_ptr<StdoutLogAppender> ptr;
         void log(Logger::ptr logger, LogLevel::Level level, LogEvent::ptr event) override; //关键字，用于显式地标记派生类中的成员函数，以表示它们是对基类中的虚函数进行重写（覆盖）的
+        std::string toYamlString() override;
 };
 
 //输出到文件的Appender
@@ -182,6 +205,7 @@ public:
 	typedef std::shared_ptr<FileLogAppender> ptr;
 	FileLogAppender(const std::string& filename);
         void log(Logger::ptr logger, LogLevel::Level level, LogEvent::ptr event) override;
+        std::string toYamlString() override;
 
 	bool reopen();  //重新打开文件
 private:
@@ -196,6 +220,8 @@ public:
 
 	void init();
 	Logger::ptr getRoot() const { return m_root;}
+
+	std::string toYamlString();
 private:
 	std::map<std::string, Logger::ptr> m_loggers;
 	Logger::ptr m_root;

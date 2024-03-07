@@ -775,5 +775,6 @@ CMakeFiles/webserver.dir/webserver/config.cc.o: \
  /usr/include/x86_64-linux-gnu/asm/unistd_64.h \
  /usr/include/x86_64-linux-gnu/bits/syscall.h \
  /root/webServer/MyWebServer/./webserver/singleton.h \
- /usr/include/c++/11/unordered_set \
- /usr/include/c++/11/bits/unordered_set.h
+ /usr/include/c++/11/iostream /usr/include/c++/11/unordered_set \
+ /usr/include/c++/11/bits/unordered_set.h \
+ /root/webServer/MyWebServer/./webserver/log.h
