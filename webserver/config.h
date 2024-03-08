@@ -47,7 +47,7 @@ public:
 	}
 };
 
-//针对vector进行了片特化
+//针对vector进行了偏特化
 template<class T>
 class LexicalCast<std::string, std::vector<T> >{
 public:
@@ -356,6 +356,7 @@ public:
 	static ConfigVarBase::ptr LookupBase(const std::string& name); //抽象类指针可以作为返回值类型
 private:
 	// 不能直接放在一个静态成员里 全局变量初始化顺序不确定
+	// 动态式初始化，用到时初始化，避免先后顺序导致未定义的情况
 	static ConfigVarMap& GetDatas(){
 	    static ConfigVarMap s_datas;
 	    return s_datas;

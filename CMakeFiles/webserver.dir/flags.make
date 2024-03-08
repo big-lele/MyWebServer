@@ -6,5 +6,11 @@ CXX_DEFINES = -Dwebserver_EXPORTS
 
 CXX_INCLUDES = -I/root/webServer/MyWebServer/. -I/root/yaml-cpp/include
 
-CXX_FLAGS =  -rdynamic -O0 -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -fPIC
+CXX_FLAGS =  -rdynamic -O0 -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -fPIC
+
+# Custom defines: CMakeFiles/webserver.dir/webserver/log.cc.o_DEFINES = __FILE__="webserver/log.cc"
+
+# Custom defines: CMakeFiles/webserver.dir/webserver/util.cc.o_DEFINES = __FILE__="webserver/util.cc"
+
+# Custom defines: CMakeFiles/webserver.dir/webserver/config.cc.o_DEFINES = __FILE__="webserver/config.cc"
 

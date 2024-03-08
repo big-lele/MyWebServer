@@ -14,7 +14,6 @@
 #include <iostream>
 
 #define WEBSERVER_LOG_LEVEL(logger, level) \
-	std::cout << logger << " - " << level <<std::endl; \
 	if(logger->getLevel() <= level) \
 	    webserver::LogEventWrap(webserver::LogEvent::ptr(new webserver::LogEvent(logger, level, \
                         __FILE__, __LINE__, 0, webserver::GetThreadId(), \
@@ -79,7 +78,7 @@ public:
 	uint32_t getFiberId() const {return m_fiberId;}
 	uint64_t getTime() const {return m_time;}
 	std::string getContent() const{return m_ss.str();}
-	std::shared_ptr<Logger> getLogger() const{std::cout << "event->getlogger" << std::endl; return m_logger;}
+	std::shared_ptr<Logger> getLogger() const{ return m_logger;}
 	LogLevel::Level getLevel() const{return m_level;}
 
 	std::stringstream& getSS(){return m_ss;}
@@ -127,8 +126,6 @@ public:
 		     
         bool isError() const{return m_error;} 
         const std::string getPattern() const {return m_pattern;}
-
-	int m_items_test(){std::cout << "test_items" <<std::endl; return m_items.size();}
 private:
 	std::string m_pattern;
 	std::vector<FormatItem::ptr> m_items;
@@ -137,6 +134,7 @@ private:
 
 //日志输出地 将日志消息输出到指定的目标
 class LogAppender{
+friend class Logger;
 public:
 	typedef std::shared_ptr<LogAppender> ptr;
 	virtual ~LogAppender(){}   //虚析构函数是为了确保在继承关系中正确释放资源
@@ -145,13 +143,14 @@ public:
         virtual std::string toYamlString() = 0;	
 
 	//抽象类是一种不能被实例化的类，它的存在主要用于作为其他类的基类或接口，并为派生类提供一种共享的接口和行为规范
-        void setFormatter(LogFormatter::ptr val){ m_formatter = val;}
+        void setFormatter(LogFormatter::ptr val);
 	LogFormatter::ptr getFormatter() const {return m_formatter;}
 
 	LogLevel::Level getLevel() const {return m_level;}
 	void setLevel(LogLevel::Level val){m_level = val;}
 protected:  //可以被派生类访问
 	LogLevel::Level m_level = LogLevel::DEBUG;
+	bool m_hasFormatter = false;
 	LogFormatter::ptr m_formatter;
 };
 

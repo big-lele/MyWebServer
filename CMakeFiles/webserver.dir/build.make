@@ -76,43 +76,43 @@ CMakeFiles/webserver.dir/webserver/log.cc.o: CMakeFiles/webserver.dir/flags.make
 CMakeFiles/webserver.dir/webserver/log.cc.o: webserver/log.cc
 CMakeFiles/webserver.dir/webserver/log.cc.o: CMakeFiles/webserver.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/webServer/MyWebServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/webserver.dir/webserver/log.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/webserver.dir/webserver/log.cc.o -MF CMakeFiles/webserver.dir/webserver/log.cc.o.d -o CMakeFiles/webserver.dir/webserver/log.cc.o -c /root/webServer/MyWebServer/webserver/log.cc
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/log.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/webserver.dir/webserver/log.cc.o -MF CMakeFiles/webserver.dir/webserver/log.cc.o.d -o CMakeFiles/webserver.dir/webserver/log.cc.o -c /root/webServer/MyWebServer/webserver/log.cc
 
 CMakeFiles/webserver.dir/webserver/log.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/webserver.dir/webserver/log.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/webServer/MyWebServer/webserver/log.cc > CMakeFiles/webserver.dir/webserver/log.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/log.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/webServer/MyWebServer/webserver/log.cc > CMakeFiles/webserver.dir/webserver/log.cc.i
 
 CMakeFiles/webserver.dir/webserver/log.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/webserver.dir/webserver/log.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/webServer/MyWebServer/webserver/log.cc -o CMakeFiles/webserver.dir/webserver/log.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/log.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/webServer/MyWebServer/webserver/log.cc -o CMakeFiles/webserver.dir/webserver/log.cc.s
 
 CMakeFiles/webserver.dir/webserver/util.cc.o: CMakeFiles/webserver.dir/flags.make
 CMakeFiles/webserver.dir/webserver/util.cc.o: webserver/util.cc
 CMakeFiles/webserver.dir/webserver/util.cc.o: CMakeFiles/webserver.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/webServer/MyWebServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/webserver.dir/webserver/util.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/webserver.dir/webserver/util.cc.o -MF CMakeFiles/webserver.dir/webserver/util.cc.o.d -o CMakeFiles/webserver.dir/webserver/util.cc.o -c /root/webServer/MyWebServer/webserver/util.cc
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/util.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/webserver.dir/webserver/util.cc.o -MF CMakeFiles/webserver.dir/webserver/util.cc.o.d -o CMakeFiles/webserver.dir/webserver/util.cc.o -c /root/webServer/MyWebServer/webserver/util.cc
 
 CMakeFiles/webserver.dir/webserver/util.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/webserver.dir/webserver/util.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/webServer/MyWebServer/webserver/util.cc > CMakeFiles/webserver.dir/webserver/util.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/util.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/webServer/MyWebServer/webserver/util.cc > CMakeFiles/webserver.dir/webserver/util.cc.i
 
 CMakeFiles/webserver.dir/webserver/util.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/webserver.dir/webserver/util.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/webServer/MyWebServer/webserver/util.cc -o CMakeFiles/webserver.dir/webserver/util.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/util.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/webServer/MyWebServer/webserver/util.cc -o CMakeFiles/webserver.dir/webserver/util.cc.s
 
 CMakeFiles/webserver.dir/webserver/config.cc.o: CMakeFiles/webserver.dir/flags.make
 CMakeFiles/webserver.dir/webserver/config.cc.o: webserver/config.cc
 CMakeFiles/webserver.dir/webserver/config.cc.o: CMakeFiles/webserver.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/webServer/MyWebServer/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/webserver.dir/webserver/config.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/webserver.dir/webserver/config.cc.o -MF CMakeFiles/webserver.dir/webserver/config.cc.o.d -o CMakeFiles/webserver.dir/webserver/config.cc.o -c /root/webServer/MyWebServer/webserver/config.cc
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/config.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/webserver.dir/webserver/config.cc.o -MF CMakeFiles/webserver.dir/webserver/config.cc.o.d -o CMakeFiles/webserver.dir/webserver/config.cc.o -c /root/webServer/MyWebServer/webserver/config.cc
 
 CMakeFiles/webserver.dir/webserver/config.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/webserver.dir/webserver/config.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/webServer/MyWebServer/webserver/config.cc > CMakeFiles/webserver.dir/webserver/config.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/config.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/webServer/MyWebServer/webserver/config.cc > CMakeFiles/webserver.dir/webserver/config.cc.i
 
 CMakeFiles/webserver.dir/webserver/config.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/webserver.dir/webserver/config.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/webServer/MyWebServer/webserver/config.cc -o CMakeFiles/webserver.dir/webserver/config.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"webserver/config.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/webServer/MyWebServer/webserver/config.cc -o CMakeFiles/webserver.dir/webserver/config.cc.s
 
 # Object files for target webserver
 webserver_OBJECTS = \

@@ -32,7 +32,6 @@ const char* LogLevel::ToString(LogLevel::Level level){
 LogLevel::Level LogLevel::FromString(const std::string& str) { //# 符号是 C++ 预处理器中的字符串化操作符
 #define XX(level, v) \
     if(str == #v) { \
-	std::cout << "LogLevel::Level" << LogLevel::level <<std::endl; \
         return LogLevel::level; \
     }
     XX(DEBUG, debug);
@@ -51,13 +50,10 @@ LogLevel::Level LogLevel::FromString(const std::string& str) { //# 符号是 C++
 }
 
 LogEventWrap::LogEventWrap(LogEvent::ptr e):m_event(e){
-    std::cout << "new " << e << std::endl;
 }
 
 LogEventWrap::~LogEventWrap(){
-	std::cout << "~LogEventWarp" << std::endl;
         m_event->getLogger()->log(m_event->getLevel(), m_event);
-	std::cout << "~LogEventWarp over" << std::endl;
 }
 
 void LogEvent::format(const char* fmt, ...){
@@ -77,10 +73,16 @@ void LogEvent::format(const char* fmt, va_list al){
 }
 
 std::stringstream& LogEventWrap::getSS(){
-	std::cout << "LEW getSS" << std::endl;
-	m_event->getSS() << " TEST" << std::endl;
-	std::cout << "LEW getSS over" << std::endl;
-       return m_event->getSS();
+	return m_event->getSS();
+}
+
+void LogAppender::setFormatter(LogFormatter::ptr val){
+    m_formatter = val;
+    if(m_formatter) {
+        m_hasFormatter = true;
+    } else {
+        m_hasFormatter = false;
+    }
 }
 
 class MessageFormatItem : public LogFormatter::FormatItem{
@@ -214,6 +216,12 @@ Logger::Logger(const std::string& name)
 
 void Logger::setFormatter(LogFormatter::ptr val){
     m_formatter = val;
+
+    for(auto& i : m_appenders) {
+        if(!i->m_hasFormatter) {
+            i->m_formatter = m_formatter;
+        }
+    }
 }
         
 void Logger::setFormatter(const std::string& val){
@@ -224,7 +232,8 @@ void Logger::setFormatter(const std::string& val){
 		  << std::endl;
 	return;
     }
-    m_formatter = new_val;
+    //m_formatter = new_val;
+    setFormatter(new_val);
 }
 
 std::string Logger::toYamlString() {                                                                      
@@ -248,9 +257,9 @@ LogFormatter::ptr Logger::getFormatter(){
 }
 
 void Logger::addAppender(LogAppender::ptr appender){
-	//if(!appender->getFormatter()){
-	  //      appender->setFormatter(m_formatter);
-	//}
+	if(!appender->getFormatter()){
+	        appender->m_formatter = m_formatter;
+	}
         m_appenders.push_back(appender);
 }
 
@@ -271,9 +280,7 @@ void Logger::log(LogLevel::Level level, LogEvent::ptr event){ //如果传入的�
         if(level >= m_level){
 		auto self = shared_from_this();
 		if(!m_appenders.empty()){
-			std::cout << "appender-num-" << m_appenders.size() << std::endl;
-		       for(auto& i: m_appenders){
-		               std::cout << "logger-appender-" << i << std::endl;      
+		       for(auto& i: m_appenders){  
 			       i->log(self, level, event);                                                                                          }
 		}
 	        else if(m_root){
@@ -319,7 +326,7 @@ std::string FileLogAppender::toYamlString(){
     if(m_level != LogLevel::UNKNOW){
         node["level"] = LogLevel::ToString(m_level);
     }
-    if(m_formatter){
+    if(m_hasFormatter && m_formatter){
         node["formatter"] = m_formatter->getPattern();
     }
     std::stringstream ss;
@@ -336,9 +343,7 @@ bool FileLogAppender::reopen(){
 
 void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event){
     if(level >= m_level){
-	    std::cout << "stdoutappender" << std::endl;
 	    std::cout << m_formatter->format(logger, level, event);
-	    std::cout << "stdoutappender over" <<std::endl;
     }
 }
 
@@ -347,7 +352,8 @@ std::string StdoutLogAppender::toYamlString(){                                  
     if(m_level != LogLevel::UNKNOW){
         node["level"] = LogLevel::ToString(m_level);
     }
-    if(m_formatter){                                                                                                                node["formatter"] = m_formatter->getPattern();
+    if(m_hasFormatter && m_formatter){    
+	node["formatter"] = m_formatter->getPattern();
     }
     std::stringstream ss;
     ss << node;
@@ -359,14 +365,10 @@ LogFormatter::LogFormatter(const std::string& pattern)
 }
 
 std::string LogFormatter::format(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event){
-	std::cout << "logformatter-format" << std::endl;
-	std::cout << m_items_test() << std::endl;
-	std::cout << "m_items??" << std::endl;
 	std::stringstream ss;
 	for(auto& i : m_items){
 	        i->format(ss, logger, level, event);
 	}
-	std::cout << "logformatter-format-over" << std::endl;
 	return ss.str();
 }
 
@@ -478,13 +480,13 @@ void LogFormatter::init(){
 			}
 		}
 
-		std::cout << "(" << std::get<0>(i) << ") - (" << std::get<1>(i) << ") - (" << std::get<2>(i) << ")" << std::endl;
+		//std::cout << "(" << std::get<0>(i) << ") - (" << std::get<1>(i) << ") - (" << std::get<2>(i) << ")" << std::endl;
 	}
-        std::cout << m_items.size() << std::endl;
+        //std::cout << m_items.size() << std::endl;
 
-	for(size_t i = 0; i < m_items.size(); i++){
-	    std::cout << i << " - " << m_items[i] << std::endl;
-	}
+	//for(size_t i = 0; i < m_items.size(); i++){
+	   // std::cout << i << " - " << m_items[i] << std::endl;
+	//}
 }
 
 LoggerManager::LoggerManager(){
@@ -505,7 +507,6 @@ Logger::ptr LoggerManager::getLogger(const std::string& name){
 	Logger::ptr logger(new Logger(name));
 	logger->m_root = m_root;
 	m_loggers[name] = logger;
-	std::cout << logger << std::endl;
 	return logger;
 }
 
@@ -564,7 +565,7 @@ public:
             }
 
             if(n["appenders"].IsDefined()) {
-                std::cout << "==" << ld.name << " = " << n["appenders"].size() << std::endl;
+                //std::cout << "==" << ld.name << " = " << n["appenders"].size() << std::endl;
                 for(size_t x = 0; x < n["appenders"].size(); ++x) {
                     auto a = n["appenders"][x];
                     if(!a["type"].IsDefined()) {
@@ -596,8 +597,8 @@ public:
                     ld.appenders.push_back(lad);
                 }
             }
-	    std::cout << "----" <<ld.name << " - "
-		      << ld.appenders.size() << std::endl;
+	    //std::cout << "----" <<ld.name << " - "
+		      //<< ld.appenders.size() << std::endl;
 
             vec.insert(ld);
         }
@@ -686,6 +687,15 @@ struct LogIniter{
                             ap.reset(new StdoutLogAppender);
                     }
                     ap->setLevel(a.level);
+		    if(!a.formatter.empty()) {
+                        LogFormatter::ptr fmt(new LogFormatter(a.formatter));
+                        if(!fmt->isError()) {
+                            ap->setFormatter(fmt);
+                        } else {
+                            std::cout << "log.name=" << i.name << " appender type=" << a.type
+                                      << " formatter=" << a.formatter << " is invalid" << std::endl;
+                        }
+                    }
                     logger->addAppender(ap);
                 }
             }
