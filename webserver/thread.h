@@ -155,7 +155,7 @@ class Thread {
 public:
     /// 线程智能指针类型， 减少内存泄露风险
     typedef std::shared_ptr<Thread> ptr;
-    Thread(std::function<void()> cb, const std::string& name); //cd线程执行函数
+    Thread(std::function<void()> cb, const std::string& name); //cb线程执行函数
     ~Thread();
 
     pid_t getId() const { return m_id;}
