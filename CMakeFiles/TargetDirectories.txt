@@ -1,5 +1,6 @@
 /root/webServer/MyWebServer/CMakeFiles/webserver.dir
 /root/webServer/MyWebServer/CMakeFiles/test.dir
 /root/webServer/MyWebServer/CMakeFiles/test_config.dir
+/root/webServer/MyWebServer/CMakeFiles/test_thread.dir
 /root/webServer/MyWebServer/CMakeFiles/edit_cache.dir
 /root/webServer/MyWebServer/CMakeFiles/rebuild_cache.dir

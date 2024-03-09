@@ -14,3 +14,5 @@ CXX_FLAGS =  -rdynamic -O0 -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-u
 
 # Custom defines: CMakeFiles/webserver.dir/webserver/config.cc.o_DEFINES = __FILE__="webserver/config.cc"
 
+# Custom defines: CMakeFiles/webserver.dir/webserver/thread.cc.o_DEFINES = __FILE__="webserver/thread.cc"
+

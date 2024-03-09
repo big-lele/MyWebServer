@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/root/webServer/MyWebServer/webserver/config.cc" "CMakeFiles/webserver.dir/webserver/config.cc.o" "gcc" "CMakeFiles/webserver.dir/webserver/config.cc.o.d"
   "/root/webServer/MyWebServer/webserver/log.cc" "CMakeFiles/webserver.dir/webserver/log.cc.o" "gcc" "CMakeFiles/webserver.dir/webserver/log.cc.o.d"
+  "/root/webServer/MyWebServer/webserver/thread.cc" "CMakeFiles/webserver.dir/webserver/thread.cc.o" "gcc" "CMakeFiles/webserver.dir/webserver/thread.cc.o.d"
   "/root/webServer/MyWebServer/webserver/util.cc" "CMakeFiles/webserver.dir/webserver/util.cc.o" "gcc" "CMakeFiles/webserver.dir/webserver/util.cc.o.d"
   )
 

@@ -158,6 +158,19 @@ test_config/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_config.dir/build.make CMakeFiles/test_config.dir/build
 .PHONY : test_config/fast
 
+#=============================================================================
+# Target rules for targets named test_thread
+
+# Build rule for target.
+test_thread: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_thread
+.PHONY : test_thread
+
+# fast build rule for target.
+test_thread/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/build
+.PHONY : test_thread/fast
+
 tests/test.o: tests/test.cc.o
 .PHONY : tests/test.o
 
@@ -205,6 +218,30 @@ tests/test_config.s: tests/test_config.cc.s
 tests/test_config.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_config.dir/build.make CMakeFiles/test_config.dir/tests/test_config.cc.s
 .PHONY : tests/test_config.cc.s
+
+tests/test_thread.o: tests/test_thread.cc.o
+.PHONY : tests/test_thread.o
+
+# target to build an object file
+tests/test_thread.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.o
+.PHONY : tests/test_thread.cc.o
+
+tests/test_thread.i: tests/test_thread.cc.i
+.PHONY : tests/test_thread.i
+
+# target to preprocess a source file
+tests/test_thread.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.i
+.PHONY : tests/test_thread.cc.i
+
+tests/test_thread.s: tests/test_thread.cc.s
+.PHONY : tests/test_thread.s
+
+# target to generate assembly for a file
+tests/test_thread.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cc.s
+.PHONY : tests/test_thread.cc.s
 
 webserver/config.o: webserver/config.cc.o
 .PHONY : webserver/config.o
@@ -254,6 +291,30 @@ webserver/log.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/webserver.dir/build.make CMakeFiles/webserver.dir/webserver/log.cc.s
 .PHONY : webserver/log.cc.s
 
+webserver/thread.o: webserver/thread.cc.o
+.PHONY : webserver/thread.o
+
+# target to build an object file
+webserver/thread.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/webserver.dir/build.make CMakeFiles/webserver.dir/webserver/thread.cc.o
+.PHONY : webserver/thread.cc.o
+
+webserver/thread.i: webserver/thread.cc.i
+.PHONY : webserver/thread.i
+
+# target to preprocess a source file
+webserver/thread.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/webserver.dir/build.make CMakeFiles/webserver.dir/webserver/thread.cc.i
+.PHONY : webserver/thread.cc.i
+
+webserver/thread.s: webserver/thread.cc.s
+.PHONY : webserver/thread.s
+
+# target to generate assembly for a file
+webserver/thread.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/webserver.dir/build.make CMakeFiles/webserver.dir/webserver/thread.cc.s
+.PHONY : webserver/thread.cc.s
+
 webserver/util.o: webserver/util.cc.o
 .PHONY : webserver/util.o
 
@@ -288,6 +349,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... test_config"
+	@echo "... test_thread"
 	@echo "... webserver"
 	@echo "... tests/test.o"
 	@echo "... tests/test.i"
@@ -295,12 +357,18 @@ help:
 	@echo "... tests/test_config.o"
 	@echo "... tests/test_config.i"
 	@echo "... tests/test_config.s"
+	@echo "... tests/test_thread.o"
+	@echo "... tests/test_thread.i"
+	@echo "... tests/test_thread.s"
 	@echo "... webserver/config.o"
 	@echo "... webserver/config.i"
 	@echo "... webserver/config.s"
 	@echo "... webserver/log.o"
 	@echo "... webserver/log.i"
 	@echo "... webserver/log.s"
+	@echo "... webserver/thread.o"
+	@echo "... webserver/thread.i"
+	@echo "... webserver/thread.s"
 	@echo "... webserver/util.o"
 	@echo "... webserver/util.i"
 	@echo "... webserver/util.s"
