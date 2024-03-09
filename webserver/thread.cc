@@ -20,12 +20,15 @@ Semaphore::~Semaphore(){
 }
 
 void Semaphore::wait(){//消息队列 生产消费模型
+    // 当信号量的值大于零时，sem_wait 函数将信号量的值减一，当信号量的值为零时，阻塞当前线程，直到信号量的值大于零才会被唤醒
+    // 操作成功返回0
     if(sem_wait(&m_semaphore)){
         throw std::logic_error("sem_wait error");
     }
 }
 
 void Semaphore::notify(){
+    // 信号量增加
     if(sem_post(&m_semaphore)){
         throw std::logic_error("sem_post error");
     }
