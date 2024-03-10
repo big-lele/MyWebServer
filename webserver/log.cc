@@ -347,7 +347,8 @@ void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level leve
     }
 }
 
-std::string StdoutLogAppender::toYamlString(){                                                                                  YAML::Node node;
+std::string StdoutLogAppender::toYamlString(){                                                                                  
+    YAML::Node node;
     node["type"] = "StdoutLogAppender";
     if(m_level != LogLevel::UNKNOW){
         node["level"] = LogLevel::ToString(m_level);
