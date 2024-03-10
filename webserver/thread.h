@@ -161,15 +161,16 @@ public:
     pid_t getId() const { return m_id;}
     const std::string& getName() const { return m_name;}
 
-    void join(); // 等待线程执行完成
+    void join(); // 等待线程执行完成，等待指定线程的结束并回收其资源
 
     static Thread* GetThis(); //获取当前的线程指针
     static const std::string& GetName(); //获取当前的线程名称
     static void SetName(const std::string& name); //设置当前线程名称
 private:
-    Thread(const Thread&) = delete;
-    Thread(const Thread&&) = delete; //右值引用
-    Thread& operator=(const Thread&) = delete;
+    // 避免线程对象的意外拷贝或移动操作，从而确保线程的正确性和可靠性:资源管理；线程安全；线程标识唯一性
+    Thread(const Thread&) = delete; //禁用了拷贝构造函数
+    Thread(const Thread&&) = delete; //右值引用, 禁用了移动构造函数
+    Thread& operator=(const Thread&) = delete; //禁用了拷贝赋值运算符
 
     static void* run(void* arg); //线程执行函数
 private:
@@ -178,7 +179,7 @@ private:
     /// 线程结构
     pthread_t m_thread = 0;
     /// 线程执行函数
-    std::function<void()> m_cb;
+    std::function<void()> m_cb; //线程的入口点，线程要执行的具体任务或操作
     /// 线程名称
     std::string m_name;
 
